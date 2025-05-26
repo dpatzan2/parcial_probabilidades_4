@@ -18,6 +18,32 @@ El objetivo es comparar las probabilidades de ganar al cambiar o no cambiar la p
 import numpy as np
 import random
 
+
+def calcular_probabilidades_teoricas(p):
+    # Matriz de transición completa P (5x5)
+    P = np.array([
+        [0, 1, 0,   0,   0],
+        [0, 0, 1,   0,   0],
+        [0, 0, 0,   p, 1-p],
+        [0, 0, 0,   1,   0],
+        [0, 0, 0,   0,   1]
+    ])
+
+    # Extraer las submatrices Q (transitorios) y R (a absorbentes)
+    Q = P[:3, :3]  # Estados E1, E2, E3
+    R = P[:3, 3:]  # Transiciones desde E1, E2, E3 hacia E4 y E5
+
+    # Matriz fundamental: N = (I - Q)^-1
+    I = np.eye(Q.shape[0])
+    N = np.linalg.inv(I - Q)
+
+    # Matriz de absorción: B = N @ R
+    B = N @ R
+
+    # Mostrar probabilidades desde E1
+    print(f"\nProbabilidad de ganar desde E1: {B[0, 0]:.4f}")
+    print(f"Probabilidad de perder desde E1: {B[0, 1]:.4f}")
+
 class CadenaMarkov10Puertas:
     def __init__(self):
         # Estados: 0=Inicial, 1=Revelación, 2=Decisión, 3=Ganar, 4=Perder
@@ -69,9 +95,18 @@ class CadenaMarkov10Puertas:
         return prob_ganar_sin_cambiar, prob_ganar_cambiando
 
 # Ejecutar simulación
-print("=== SIMULACIÓN CON CADENAS DE MARKOV ===\n")
+print("=== RESULTADOS TEÓRICOS CON CADENAS DE MARKOV ===\n")
+# Estrategia: no cambiar (p = 0.1)
+print("Estrategia: NO cambiar de puerta (p = 0.1)")
+calcular_probabilidades_teoricas(p=0.1)
+
+# Estrategia: siempre cambiar (p = 0.9)
+print("\nEstrategia: CAMBIAR de puerta (p = 0.9)")
+calcular_probabilidades_teoricas(p=0.9)
+
+print("\n=== SIMULACIÓN CON CADENAS DE MARKOV ===\n")
 cadena = CadenaMarkov10Puertas()
-prob_sin_cambiar, prob_cambiando = cadena.calcular_probabilidades(10000)
+prob_sin_cambiar, prob_cambiando = cadena.calcular_probabilidades(1000000)
 
 print(f"Estrategia: NUNCA CAMBIAR")
 print(f"  - Probabilidad de GANAR: {prob_sin_cambiar:.4f} ≈ {prob_sin_cambiar:.1%}")

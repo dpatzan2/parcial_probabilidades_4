@@ -102,12 +102,12 @@ class LeyGrandesNumeros10Puertas:
 
 # Ejecutar simulación
 print("=== LEY DE LOS GRANDES NÚMEROS ===\n")
-print("Simulando 10,000 juegos para cada estrategia...")
+print("Simulando 1,000,000 juegos para cada estrategia...")
 
 lgn = LeyGrandesNumeros10Puertas()
-numeros, promedios_no_cambiar, promedios_cambiar = lgn.simular_convergencia(10000)
+numeros, promedios_no_cambiar, promedios_cambiar = lgn.simular_convergencia(1000000)
 
-print(f"\nResultados finales después de 10,000 juegos:")
+print(f"\nResultados finales después de 1,000,000 juegos:")
 print(f"  - Sin cambiar: {promedios_no_cambiar[-1]:.4f} (teórico: 0.1000)")
 print(f"  - Cambiando: {promedios_cambiar[-1]:.4f} (teórico: 0.9000)")
 
